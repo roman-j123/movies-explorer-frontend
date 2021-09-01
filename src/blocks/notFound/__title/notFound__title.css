@@ -4,3 +4,8 @@
   font-size: 140px;
   font-weight: 400;
 }
+@media (min-width: 320px) and (max-width: 560px) {
+  .notFound__title {
+    font-size: 80px;
+  }
+}
