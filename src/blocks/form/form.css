@@ -1,0 +1,13 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: flex-start;
+}
+@media (min-width: 320px) and (max-width: 540px) {
+  .form {
+    width: 100%;
+    height: 100%;
+    justify-content: flex-start;
+  }
+}

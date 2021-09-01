@@ -1,0 +1,14 @@
+.footer__links-link {
+  color: #000000;
+  font-size: 13px;
+  font-weight: 400;
+  text-decoration: none;
+}
+.footer__links-link:hover {
+  opacity: .7;
+}
+@media (min-width: 320px) and (max-width: 540px) {
+  .footer__links-link {
+    font-size: 12px;
+  }
+}

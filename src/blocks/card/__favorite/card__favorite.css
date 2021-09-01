@@ -1,0 +1,11 @@
+.card__favorite {
+  width: 30px;
+  height: 30px;
+  background-color: rgba(249,249,249, 1);
+  background-image: url('../../../images/save_false.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}

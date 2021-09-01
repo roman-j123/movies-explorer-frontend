@@ -1,0 +1,19 @@
+.promo {
+  height: 493px;
+  margin: 0 auto;
+  width: calc(100% - 80px);
+  background-color: rgba(245,245,245, 1);
+  border-radius: 10px;
+}
+@media (max-width: 768px) {
+  .promo {
+    width: calc(100% - 40px);
+    height: 834px;
+  }
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .promo {
+    width: calc(100% - 28px);
+    height: 586px;
+  }
+}

@@ -1,0 +1,30 @@
+.aboutMe__photo {
+  min-width: 255px;
+  width: 270px;
+  min-height: 307px;
+  height: 327px;
+  display: block;
+  background-color: rgba(245,245,246, 1);
+  background-image: url('../../../images/photo.jpg');
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+}
+@media (max-width: 768px) {
+  .aboutMe__photo {
+    width: 255px;
+    height: 307px;
+  }
+}
+@media (min-width: 561px) and (max-height: 767px) {
+  .aboutMe__photo {
+    width: 292px;
+    height: 352px;
+  }
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .aboutMe__photo {
+    width: 292px;
+    height: 352px;
+  }
+}

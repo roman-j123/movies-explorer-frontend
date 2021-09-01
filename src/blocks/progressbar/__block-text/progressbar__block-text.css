@@ -1,0 +1,9 @@
+.progressbar__block-text {
+  font-size: 14px;
+  font-weight: 400;
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .progressbar__block-text {
+    font-size: 11px;
+  }
+}

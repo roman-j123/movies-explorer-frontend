@@ -1,0 +1,11 @@
+.aboutMe__social {
+  margin: auto 0 0 0;
+  padding: 0;
+  display: flex;
+  list-style: none;
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .aboutMe__social {
+    margin: 40px 0 0 0;
+  }
+}

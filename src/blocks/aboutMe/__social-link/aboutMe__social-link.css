@@ -1,0 +1,14 @@
+.aboutMe__social-link {
+  color: #000000;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+.aboutMe__social-link:hover {
+  opacity: .7;
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .aboutMe__social-link {
+    font-size: 14px;
+  }
+}

@@ -1,0 +1,9 @@
+.field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(232,232,232, 1);
+}
+.field:last-child {
+  border: none;
+}

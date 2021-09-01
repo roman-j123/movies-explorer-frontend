@@ -1,0 +1,26 @@
+.navtab__link {
+  min-width: 96px;
+  padding: 10px 13.5px;
+  display: inline-block;
+  color:rgba(0,0,0, 1);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  text-align: center;
+  text-decoration: none;
+  background-color: rgba(232,232,232, 1);
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+.navtab__link:hover {
+  background-color: rgba(232,232,232, .8);
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .navtab__link {
+    min-width: 82px;
+    padding: 5px 15.5px;
+    font-size: 10px;
+    line-height: 16px;
+    border-radius: 6px;
+  }
+}

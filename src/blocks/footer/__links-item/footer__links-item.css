@@ -1,0 +1,12 @@
+.footer__links-item {
+  margin: 0 20px 0 0;
+}
+.footer__links-item:last-child {
+  margin: 0 0 0 0;
+}
+@media (min-width: 320px) and (max-width: 540px) {
+  .footer__links-item {
+    margin: 0 0 12px 0;
+    text-align: center;
+  }
+}

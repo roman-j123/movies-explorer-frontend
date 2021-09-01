@@ -1,0 +1,6 @@
+.navtab__item {
+  margin: 0 10px 0 0;
+}
+.navtab__item:last-child {
+  margin: 0 0 0 0;
+}

@@ -1,0 +1,12 @@
+.profile__navigation {
+  margin: 0 auto;
+  padding: 0;
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 500;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}

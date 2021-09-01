@@ -1,0 +1,12 @@
+.notFound__back {
+  padding: 0;
+  margin: auto 0 0 0;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  color: rgba(43,224,128, 1);
+  cursor: pointer;
+}
+.notFound__back:hover {
+  color: rgba(43,224,128, .7);
+}

@@ -1,0 +1,12 @@
+.about__block {
+  max-width: 48.246%;
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .about__block {
+    margin: 0 0 56px 0;
+    max-width: 100%;
+  }
+  .about__block:last-child {
+    margin: 0 0 0 0;
+  }
+}

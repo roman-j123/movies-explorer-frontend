@@ -1,0 +1,15 @@
+.form__input {
+  padding: 15px;
+  margin: 0 0 20px 0;
+  height: 46px;
+  color: rgba(0,0,0, 1);
+  font-size: 13px;
+  font-weight: 400;
+  background-color: rgba(249,249,249, 1);
+  border: none;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+.form__input:focus-visible {
+  outline: none;
+}

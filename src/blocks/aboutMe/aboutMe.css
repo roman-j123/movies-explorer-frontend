@@ -1,0 +1,19 @@
+.aboutMe {
+  margin: 67px 0 0 0;
+  display: flex;
+  justify-content: space-between;
+}
+@media (max-width: 768px) {
+  .aboutMe {
+    margin: 66px 0 0 0;
+  }
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .aboutMe {
+    margin: 60px 0 0 0;
+    flex-direction: column-reverse;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+}

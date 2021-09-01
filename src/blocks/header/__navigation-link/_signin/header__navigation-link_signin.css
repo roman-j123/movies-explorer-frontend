@@ -1,0 +1,13 @@
+.header__navigation-link_signin {
+  padding: 5px 20px;
+  background-color: rgba(43, 224,128, 1);
+  border-radius: 3px;
+}
+.header__navigation-link_signin:hover {
+  background-color: rgba(43, 224,128, .8);
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .header__navigation-link_signin {
+    padding: 5px 12px;
+  }
+}

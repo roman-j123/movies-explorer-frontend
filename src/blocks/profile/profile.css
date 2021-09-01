@@ -1,0 +1,14 @@
+.profile {
+  padding: 0 70px;
+  width: 100%;
+  height: calc(100% - 94px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .profile {
+    padding: 0 30px 30px;
+  }
+}

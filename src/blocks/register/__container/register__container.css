@@ -1,0 +1,14 @@
+.register__container {
+  max-width: 396px;
+  width: 100%;
+  max-height: 620px;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .register__container {
+    align-items: center;
+  }
+}

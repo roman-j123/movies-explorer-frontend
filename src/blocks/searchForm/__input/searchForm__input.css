@@ -1,0 +1,26 @@
+.searchForm__input {
+  padding: 15px 0;
+  width: 100%;
+  border: none;
+  color: rgba(160,160,160, 1);
+  font-size: 28px;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(232,232,232, 1);
+  text-align: center;
+  background-color: rgba(255,255,255, 1);
+  box-sizing: border-box;
+}
+.searchForm__input::placeholder {
+  text-align: center;
+}
+.searchForm__input:focus-visible {
+  outline: none;
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .searchForm__input {
+    font-size: 18px;
+  }
+  .searchForm__input::placeholder {
+    text-align: left;
+  }
+}

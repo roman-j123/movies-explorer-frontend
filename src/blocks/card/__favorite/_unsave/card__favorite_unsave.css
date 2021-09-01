@@ -1,0 +1,5 @@
+.card__favorite_unsave {
+  background-image: url('../../../../images/unsave.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+}

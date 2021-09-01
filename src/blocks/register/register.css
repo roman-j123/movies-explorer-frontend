@@ -1,0 +1,14 @@
+.register {
+  padding: 70px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .register {
+    padding: 56px 30px 0 30px;
+  }
+}

@@ -1,0 +1,8 @@
+.cardList {
+  margin: 0 0 80px 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px 24px;
+  list-style: none;
+}

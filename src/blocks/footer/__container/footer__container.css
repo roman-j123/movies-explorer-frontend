@@ -1,0 +1,12 @@
+.footer__container {
+  width: 100%;
+  margin: 0 0 20px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+@media (min-width: 320px) and (max-width: 540px) {
+  .footer__container {
+    flex-direction: column-reverse;
+  }
+}

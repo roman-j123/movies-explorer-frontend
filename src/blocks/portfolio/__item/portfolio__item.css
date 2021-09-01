@@ -1,0 +1,8 @@
+.portfolio__item {
+  margin: 0 0 20px 0;
+  box-shadow: 0 1px 0 0 #E8E8E8;
+}
+.portfolio__item:last-child {
+  margin: 0 0 0 0;
+  box-shadow: none;
+}

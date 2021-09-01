@@ -1,0 +1,18 @@
+.section_techs {
+  padding-top: 101px;
+  padding-bottom: 103px;
+  background-color: #F5F5F5;
+}
+@media (max-width: 768px) {
+  .section_techs {
+    padding-top: 90px;
+    padding-bottom: 90px;
+  }
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .section_techs {
+    padding-top: 70px;
+    padding-bottom: 70px;
+    background-color: #ffffff;
+  }
+}

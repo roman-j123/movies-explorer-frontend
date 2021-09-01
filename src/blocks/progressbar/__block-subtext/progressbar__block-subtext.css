@@ -1,0 +1,11 @@
+.progressbar__block-subtext {
+  position: absolute;
+  top: 50px;
+  color: #A0A0A0;
+  font-size: 14px;
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .progressbar__block-subtext {
+    font-size: 11px;
+  }
+}

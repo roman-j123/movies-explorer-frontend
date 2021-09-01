@@ -1,0 +1,8 @@
+.container_footer {
+  padding: 75px 0 0 0;
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .container_footer {
+    padding: 79px 0 0 0;
+  }
+}

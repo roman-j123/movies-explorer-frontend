@@ -1,0 +1,6 @@
+@media (max-width: 768px) {
+  .header__navigation-link_active {
+    padding-bottom: 5px;
+    border-bottom: 2px solid black;
+  }
+}

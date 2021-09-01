@@ -1,0 +1,19 @@
+.searchForm__icon {
+  width: 34px;
+  height: 34px;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(0, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(232,232,232, 1);
+  background-image: url('../../../images/icon_search.svg');
+  background-position: center;
+  background-size: 22px;
+  background-repeat: no-repeat;
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .searchForm__icon {
+    display: none;
+  }
+}

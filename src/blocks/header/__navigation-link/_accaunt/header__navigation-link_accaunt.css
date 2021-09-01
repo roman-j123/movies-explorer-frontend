@@ -1,0 +1,16 @@
+.header__navigation-link_accaunt::after {
+  content: '';
+  width: 26px;
+  height: 30px;
+  margin: 0 0 0 10px;
+  border-radius: 4px;
+  background-color:rgba(249,249,249, 1);
+  background-image: url('../../../../images/profile.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+@media (min-width: 320px) and (max-width: 768px) {
+  .header__navigation-link_accaunt {
+    font-size: 14px;
+  }
+}

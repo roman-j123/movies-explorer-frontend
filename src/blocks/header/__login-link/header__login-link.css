@@ -1,0 +1,12 @@
+.header__login-link {
+  color: rgba(0,0,0, 1);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  text-decoration: none;
+}
+@media (min-width:320px) and (max-width: 560px) {
+  .header__login-link {
+    font-size: 10px;
+  }
+}

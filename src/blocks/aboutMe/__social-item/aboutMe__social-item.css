@@ -1,0 +1,6 @@
+.aboutMe__social-item {
+  margin: 0 20px 0 0;
+}
+.aboutMe__social-item:last-child {
+  margin: 0 0 0 0;
+}

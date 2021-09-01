@@ -1,0 +1,6 @@
+.card__favorite_true {
+  background-color: rgba(43,224,128, 1);
+  background-image: url('../../../../images/save_true.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+}

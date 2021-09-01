@@ -1,0 +1,16 @@
+.section_aboutMe {
+  padding-top: 110px;
+  padding-bottom: 100px;
+}
+@media (max-width: 768px) {
+  .section_aboutMe {
+    padding-top: 90px;
+    padding-bottom: 90px;
+  }
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .section_aboutMe {
+    padding-top: 70px;
+    padding-bottom: 70px;
+  }
+}

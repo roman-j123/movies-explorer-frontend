@@ -1,0 +1,33 @@
+.portfolio__link {
+  padding: 0 5px 20px 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #000000;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 50px;
+  text-decoration: none;
+  letter-spacing: -1px;
+  box-sizing: border-box;
+}
+.portfolio__link:hover .portfolio__link-text {
+  opacity: .7;
+}
+@media (max-width: 768px) {
+  .portfolio__link {
+    font-size: 28px;
+  }
+}
+@media (min-width: 320px) and (max-width: 540px) {
+  .portfolio__link {
+    padding: 0 0 19px 0;
+    font-size: 18px;
+    line-height: 28px;
+  }
+  svg{
+    width: 14px;
+    height: 14px;
+  }
+}

@@ -1,0 +1,11 @@
+.searchForm__checkbox-text {
+  margin: 0 0 0 10px;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 400;
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .searchForm__checkbox-text {
+    font-size: 11px;
+  }
+}

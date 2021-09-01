@@ -1,0 +1,16 @@
+.searchForm__button {
+  min-width: 80px;
+  min-height: 34px;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  color: rgba(255,255,255, 1);
+  font-size: 11px;
+  line-height: 18px;
+  font-weight: 500;
+  background-color: rgba(43,224,128, 1);
+  border: none;
+  border-radius: 48px;
+  transform: translate(0, -50%);
+  cursor: pointer;
+}

@@ -1,0 +1,22 @@
+.burger {
+  padding: 0;
+  width: 44px;
+  height: 44px;
+  display: none;
+  background-image: url("../../images/burger.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  border: none;
+}
+@media (max-width: 768px) {
+  .burger {
+    display: block;
+  }
+}
+@media (min-width: 320px) and (max-width:560px) {
+  .burger {
+    width: 40px;
+    height: 40px;
+  }
+}

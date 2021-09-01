@@ -1,0 +1,17 @@
+.main__section {
+  padding-left: 70px;
+  padding-right: 70px;
+  box-sizing: border-box;
+}
+@media (max-width: 768px) {
+  .main__section {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .main__section {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}

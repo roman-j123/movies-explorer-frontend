@@ -1,0 +1,15 @@
+.section__title_portfolio {
+  padding-bottom: 50px;
+  border: none;
+  color: #A0A0A0;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0;
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .section__title_portfolio {
+    font-size: 14px;
+    line-height: 20px;
+  }
+}

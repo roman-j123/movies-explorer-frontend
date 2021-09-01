@@ -1,0 +1,14 @@
+.form__submit-text-href {
+  color: rgba(43,224,128, 1);
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none;
+}
+.form__submit-text-href:hover {
+  color: rgba(43,224,128, .8);
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .form__submit-text-href {
+    font-size: 12px;
+  }
+}

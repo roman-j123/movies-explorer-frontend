@@ -1,0 +1,11 @@
+.form__submit-text {
+  color: rgba(160,160,160, 1);
+  font-size: 14px;
+  font-weight: 400;
+  text-align: center;
+}
+@media (min-width: 320px) and (max-width: 560px) {
+  .form__submit-text {
+    font-size: 12px;
+  }
+}
