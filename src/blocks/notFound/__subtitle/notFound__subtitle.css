@@ -5,3 +5,8 @@
   font-weight: 400;
   text-align: center;
 }
+@media (min-width: 320px) and (max-width: 560px) {
+  .notFound__subtitle {
+    font-size: 12px;
+  }
+}

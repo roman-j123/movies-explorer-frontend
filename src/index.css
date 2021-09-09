@@ -39,7 +39,6 @@
 @import url("./blocks/header/__navigation/header__navigation.css");
 @import url("./blocks/header/__navigation/_open/header__navigation_open.css");
 @import url("./blocks/header/__navigation-item/header__navigation-item.css");
-@import url("./blocks/header/__navigation-item/_notLogin/header__navigation-item_notLogin.css");
 @import url("./blocks/header/__navigation-item/_main/header__navigation-item_main.css");
 @import url("./blocks/header/__navigation-item/_open/header__navigation-item_open.css");
 @import url("./blocks/header/__navigation-link/header__navigation-link.css");

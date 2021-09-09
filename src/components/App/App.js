@@ -14,6 +14,10 @@ function App() {
   const [signIn, setIsSignIn] = useState(true);
   const [films, setFilms] = useState([]);
   useEffect(() => {
+    document.title = 'Учебный проект студента факультета Веб-разработки.';
+  })
+ 
+  useEffect(() => {
     setFilms(FilmsArr);
     if(document.location.pathname === '/') {
       setIsSignIn(false);
