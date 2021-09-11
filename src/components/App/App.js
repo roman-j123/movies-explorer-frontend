@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { currentUserContext } from '../../contexts/currentUserContext.js';
 import Header from '../Header/Header.js';
 import Main from '../Main/Main.js';
 import Movies from '../Movies/Movies.js';
@@ -11,6 +12,7 @@ import PageNotFound from '../PageNotFound/PageNotFound.js'
 import FilmsArr from '../../vendor/films.js';
 
 function App() {
+  const [currentUser, setCurrentUser] = useState({});
   const [signIn, setIsSignIn] = useState(true);
   const [films, setFilms] = useState([]);
   useEffect(() => {
@@ -20,13 +22,14 @@ function App() {
     }
   },[])
   return (
+    <currentUserContext.Provider value={currentUser}>
     <div className="app">
         <Switch>
           <Route exact path="/">
             <Header signIn={signIn} />
             <Main />
             <Footer />
-          </ Route>
+          </Route>
           <Route path="/signup">
             <Register />
           </Route>
@@ -52,6 +55,7 @@ function App() {
           </Route>
         </ Switch>
     </div>
+    </currentUserContext.Provider>
   );
 }
 
