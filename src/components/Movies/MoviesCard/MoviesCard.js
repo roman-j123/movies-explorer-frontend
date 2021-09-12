@@ -12,8 +12,11 @@ function MoviesCard(props) {
     <li className="cardList__item card">
       <div className="card__header">
         <div className="card__header-content">
-          <span className="card__title">{props.card.name}</span>
-          <span className="card__time">{props.card.time}</span>
+          <span className="card__title">{props.card.nameRU}</span>
+          <span className="card__time">
+          {props.card.duration <= 40 ? `${props.card.duration}мин` : 
+          `${Math.floor(props.card.duration / 60)}ч ${props.card.duration - 60}мин`}
+          </span>
         </div>
           { document.location.pathname !== '/saved-movies' && 
           <button 
@@ -29,7 +32,7 @@ function MoviesCard(props) {
             ></button>
           }
       </div>
-      <img src={props.card.pic} alt={props.card.name} className="card__image" />
+      <img src={`https://api.nomoreparties.co${props.card.image.url}`} alt={props.card.image.name} className="card__image" />
     </li>
   )
 }

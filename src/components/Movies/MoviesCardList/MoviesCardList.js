@@ -18,14 +18,12 @@ function MoviesCardList(props) {
       />
   ));
 
-  function handleSaveCard(index) {
+  function handleSaveCard(id) {
     setSaveCard(!saveCard);
-    props.films[index].liked = !saveCard;
-    console.log(props.films[index])
+    console.log(props.films[id-1])
   }
-  function handleUnsaveCard(index) {
+  function handleUnsaveCard(id) {
     setSaveCard(false);
-    props.films[index].liked = saveCard;
   }
   return (
     <>

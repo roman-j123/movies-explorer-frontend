@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import moviesApi from '../../utils/MoviesApi.js';
 import { Route, Switch } from 'react-router-dom';
 import { currentUserContext } from '../../contexts/currentUserContext.js';
 import Header from '../Header/Header.js';
@@ -9,14 +10,14 @@ import Register from '../Register/Register.js';
 import Login from '../Login/Login.js';
 import Footer from '../Footer/Footer.js';
 import PageNotFound from '../PageNotFound/PageNotFound.js'
-import FilmsArr from '../../vendor/films.js';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [signIn, setIsSignIn] = useState(true);
   const [films, setFilms] = useState([]);
+ 
   useEffect(() => {
-    setFilms(FilmsArr);
+    moviesApi.getAllFilms().then(response => {setFilms(response)}).catch(err => {console.log(err)});
     if(document.location.pathname === '/') {
       setIsSignIn(false);
     }
@@ -43,7 +44,7 @@ function App() {
           </Route>
           <Route path="/saved-movies">
             <Header signIn={signIn} />
-            <Movies moviesList={films.filter(el => el.liked === true)} />
+            <Movies moviesList={films} />
             <Footer />
           </Route>
           <Route path="/profile">

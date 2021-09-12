@@ -23,7 +23,7 @@ function Movies(props) {
         <SearchForm handleMoviesList={handleShowShortMovies} />
         <section className="movies__container">
         <MoviesCardList
-          films={(showShortMovies ? props.moviesList.filter(el => el.short === true) : props.moviesList )}
+          films={(showShortMovies ? props.moviesList.filter(el => el.duration <= 40) : props.moviesList )}
           showFilms={showFilms}
         />
         <button className="movies__button-more" type="button" onClick={handleShowMore}>Еще</button>
