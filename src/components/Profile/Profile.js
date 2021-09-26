@@ -1,62 +1,84 @@
 import React, { useState, useEffect } from 'react';
-
+import Header from '../Header/Header';
+import { currentUserContext } from '../../contexts/currentUserContext.js';
+import { useFormWithValidation } from '../../hooks/formValidation.js';
 function Profile(props) {
-  const [allProfileInputs, setAllProfileInputs] = useState([]);
-  const [editInputProfile, setEditInputProfile] = useState(true);
-  const [userName, setUserName] = useState('Виталий');
-  const [userEmail, setUserEmail] = useState('pochta@yandex.ru');
-  const editButton = document.querySelector('.profile__submit')
-  const editNavigationAll = document.querySelectorAll('.profile__navigation');
-  useEffect(() => {
-    setAllProfileInputs([...document.querySelectorAll('.field__value')]);
-  },[])
-
+  const validate = useFormWithValidation();
+  const currentUser = React.useContext(currentUserContext);
+  const [editStatus, setEditStatus] = useState(false);
+  
+  function handleSubmit(event){
+    event.preventDefault();
+    props.onEdit(validate.values);
+    alert('Вы успешно обновили проифль')
+    setEditStatus(false)
+  }
   function handleClickEditButton() {
-    editButton.classList.remove('profile__submit_disabled');
-    editNavigationAll.forEach(item => {item.classList.add('profile__navigation_hidden')});
-    allProfileInputs.map(item => item.disabled = setEditInputProfile(!editInputProfile));
+    setEditStatus(true)
   }
-  function handleClickSaveButton() {
-    allProfileInputs.map(item => item.disabled = setEditInputProfile(!editInputProfile));
-    editNavigationAll.forEach(item => {item.classList.remove('profile__navigation_hidden')});
-    editButton.classList.add('profile__submit_disabled');
+
+  function handleLogout() {
+    props.onLogout();
   }
-  function handleChangeName(event) {
-    setUserName(event.target.value);
-  }
-  function handleChangeEmail(event) {
-    setUserEmail(event.target.value);
-  }
+
+  useEffect(() => {
+    validate.setValues(currentUser);
+  }, [currentUser]);
   return (
+    <>
+    <Header signIn={props.loggedIn} />
     <main className="profile">
       <div className="profile__container">
-        <h1 className="profile__title">Привет, Виталий!</h1>
-        <form className="profile__content" method="POST" action="">
+        <h1 className="profile__title">Привет, {currentUser.name}!</h1>
+        <form className="profile__content" method="POST">
           <div className="profile__field field">
             <label className="field__title">Имя</label>
-            <input 
-              className="field__value" 
-              type="text" 
-              value={userName || ''}
-              onChange={handleChangeName}
-              disabled={editInputProfile} />
+              <input 
+                className="field__value" 
+                type="text"
+                name="name"
+                pattern="^[A-Za-zА-ЯЁа-яё -]+$"
+                value={validate.values.name}
+                onChange={validate.handleChange}
+                minLength={2}
+                maxLength={20}
+                disabled={editStatus ? false : true}
+              />
           </div>
+          <p className="field__error">{validate.errors.name || ''}</p>
           <div className="profile__field field">
             <label className="field__title">Почта</label>
             <input className="field__value" 
               type="email" 
-              value={userEmail || ''}
-              onChange={handleChangeEmail}
-              disabled={editInputProfile} />
+              name="email"
+              value={validate.values.email}
+              onChange={validate.handleChange}
+              minLength={2}
+              maxLength={20}
+              disabled={editStatus ? false : true}
+              />
           </div>
+          <p className="field__error">{validate.errors.email || ''}</p>
         </form>
         <div className="profile__buttons-container">
-          <button className="profile__submit profile__submit_disabled" type="submit" onClick={handleClickSaveButton} >Сохарнать</button>
-          <button className="profile__navigation profile__navigation_edit" onClick={handleClickEditButton}>Редактировать</button>
-          <button className="profile__navigation profile__navigation_exit">Выйти из аккаунта</button>
+          <span style={{textAlign: 'center', fontSize: '12px', color: 'red', marginBottom: '15px'}}>{props.errorMessage}</span>
+          {editStatus ?
+            <button 
+              className="profile__submit" 
+              type="submit" 
+              onClick={handleSubmit}
+              disabled={!validate.isValid || validate.values.name.legth === 0}  
+              >Сохарнить</button>
+          :
+          <>
+            <button className="profile__navigation profile__navigation_edit" onClick={handleClickEditButton} >Редактировать</button>
+            <button className="profile__navigation profile__navigation_exit" onClick={handleLogout}>Выйти из аккаунта</button>
+          </>
+          }
         </div>
       </div>
     </main>
+    </>
   )
 }
 

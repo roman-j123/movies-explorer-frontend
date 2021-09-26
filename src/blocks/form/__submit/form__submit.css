@@ -9,6 +9,9 @@
   border-radius: 3px;
   cursor: pointer;
 }
+.form__submit:disabled {
+  background-color: gray;
+}
 @media (min-width: 320px) and (max-width: 560px) {
   .form__submit {
     font-size: 12px;

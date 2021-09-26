@@ -2,7 +2,7 @@ class MoviesApi {
   constructor({adress}) {
     this._adress = adress;
   }
-  _checkRdsponse() {
+  _checkResponse() {
     return res => {
       if(res.ok) {
         return res.json();
@@ -14,7 +14,7 @@ class MoviesApi {
     return fetch(`${this._adress}`, {
       method: 'GET',
       mode: 'cors',
-    }).then(this._checkRdsponse())
+    }).then(this._checkResponse())
   }
 
 }

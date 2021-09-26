@@ -10,3 +10,6 @@
   border-radius: 3px;
   cursor: pointer;
 }
+.profile__submit:disabled {
+  background-color: gray;
+}

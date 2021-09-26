@@ -1,0 +1,5 @@
+.field__error {
+  margin: 2px 0 2px 0;
+  font-size: 12px;
+  color: rgba(255,0,77, 1);
+}

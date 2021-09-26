@@ -1,35 +1,61 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MoviesCardList from './MoviesCardList/MoviesCardList.js';
 import SearchForm from './SearchForm/SearchForm.js';
+import Footer from '../Footer/Footer.js';
+import Preloader from './Preloader/Preloader.js';
+import Header from '../Header/Header.js';
 
 function Movies(props) {
-  const [showShortMovies, setShowShortMovies] = useState(false);
-  const [showFilms, setShowFilms] = useState(12);
+  const [filter, setFilter] = useState(false);
+  const [shortMovies, setShortMovies] = useState([])
+  
+  function toggleFilter() {
+    setFilter(!filter);
+  }
+  function sortShortMovies(movies) {
+    const shortMoviesArray = movies.filter((movie) => movie.duration <= 40);
+  return shortMoviesArray;
+  }
+  function handleSave(item) {
+    props.handleSaveCard(item);
+  }
+  function handleDelete(item) {
+    props.handleDeleteMovie(item)
+  }
 
-  function handleShowMore() {
-    if(showFilms <= props.moviesList.length) {
-      setShowFilms(showFilms + 12);
-    } else {
-      document.querySelector('.movies__button-more').disabled = true;
+  useEffect(() => {
+    if(filter) {
+      setShortMovies(sortShortMovies(props.searchResults))
     }
-  }
-  function handleShowShortMovies() {
-    setShowShortMovies(!showShortMovies)
-  }
+  }, [filter])
   return (
     <>
+    <Header signIn={props.loggedIn}/>
     <main className="movies container">
       <div className="container__inner">
-        <SearchForm handleMoviesList={handleShowShortMovies} />
-        <section className="movies__container">
-        <MoviesCardList
-          films={(showShortMovies ? props.moviesList.filter(el => el.duration <= 40) : props.moviesList )}
-          showFilms={showFilms}
+        <SearchForm
+        filter={toggleFilter}
+        handleInput={props.handleInput}
         />
-        <button className="movies__button-more" type="button" onClick={handleShowMore}>Еще</button>
+        <section className="movies__container"> 
+        {props.loading && 
+        <Preloader /> 
+        }
+        <MoviesCardList
+          films={filter ? shortMovies : props.searchResults}
+          onCardSave={handleSave}
+          onCardDelete={handleDelete}
+          checkFilmStatus={props.checkFilmStatus}
+        />
+          <button 
+          className="movies__button-more" 
+          type="button" 
+        >Еще</button> 
+
       </section>
       </div>
     </main>
+    <Footer />
     </>
   )
 }
