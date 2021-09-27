@@ -30,24 +30,36 @@ function SavedMovies(props) {
     <main className="movies container">
       <div className="container__inner">
         <SearchForm
-          filter={toggleFilter}
-          handleInput={props.handleInput}
+        filter={toggleFilter}
+        handleInput={props.handleInput}
         />
         <section className="movies__container"> 
-          {props.loading && <Preloader />}
-
-            <>
-            <MoviesCardList
-            films={filter ? shortMovies : props.favoriteFilmsList}
-            onCardDelete={handleDelete}
-            checkFilmStatus={props.checkFilmStatus}
-            /> 
+        {props.loading && 
+        <Preloader /> 
+        }
+        {props.favoriteFilmsList &&
+        <>
+        <MoviesCardList
+          films={filter ? shortMovies : props.favoriteFilmsList}
+          onCardDelete={handleDelete}
+          checkFilmStatus={props.checkFilmStatus}
+        />
+        {props.favoriteFilmsList && props.favoriteFilmsList.length > 3 ?
           <button 
-            className="movies__button-more" 
-            type="button" 
-          >Еще</button>
-          </>
-          
+          className="movies__button-more" 
+          type="button" 
+        >Еще</button> 
+        :
+        null
+        }
+        </>
+        }
+        {props.favoriteFilmsList === undefined && 
+          <p style={{textAlign: 'center'}}>Ничего не найдено</p>
+        }
+        {!props.favoriteFilmsList.length && 
+          <p style={{textAlign: 'center'}}>Вы еще ничего не сохранили</p>
+        }
       </section>
       </div>
     </main>
