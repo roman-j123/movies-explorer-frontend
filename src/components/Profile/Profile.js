@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../Header/Header';
 import { currentUserContext } from '../../contexts/currentUserContext.js';
 import { useFormWithValidation } from '../../hooks/formValidation.js';
+
 function Profile(props) {
   const validate = useFormWithValidation();
   const currentUser = React.useContext(currentUserContext);
@@ -38,7 +39,7 @@ function Profile(props) {
                 type="text"
                 name="name"
                 pattern="^[A-Za-zА-ЯЁа-яё -]+$"
-                value={validate.values.name}
+                value={validate.values.name || ''}
                 onChange={validate.handleChange}
                 minLength={2}
                 maxLength={20}
@@ -51,7 +52,7 @@ function Profile(props) {
             <input className="field__value" 
               type="email" 
               name="email"
-              value={validate.values.email}
+              value={validate.values.email || ''}
               onChange={validate.handleChange}
               minLength={2}
               maxLength={20}

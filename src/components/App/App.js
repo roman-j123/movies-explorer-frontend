@@ -186,12 +186,15 @@ function App() {
         item.nameRU.toLowerCase().includes(value.toLowerCase())
               )
     })
+    if(searchResult.length < 1) {
+      return
+    }
     return searchResult;
   }
   function searchAllMovies(keyword) {
     const films = JSON.parse(localStorage.getItem('moviesList'));
     setSearchFilms(handleSubmit(films, keyword))
-    localStorage.setItem('searchResult', JSON.stringify(searchFilms))
+    return localStorage.setItem('searchResult', JSON.stringify(searchFilms))
   }
   function searchFavoriteMovies(keyword) {
     setFavoriteSearchFilms(favoriteFilms)
@@ -204,14 +207,15 @@ function App() {
   
   
   useEffect(() => {
-    const result = JSON.parse(localStorage.getItem('searchResult'));
-    if(result) {
-      setSearchFilms(result);
-    }
+    if(searchFilms) {
+      localStorage.setItem('searchResult', JSON.stringify(searchFilms));
+    } else {
+      localStorage.setItem('searchResult', undefined);
+    } 
     if(favoriteFilms) {
       setFavoriteSearchFilms(favoriteFilms)
     }
-  },[loggedIn, favoriteFilms])
+  },[loggedIn, favoriteFilms, searchFilms])
 
   return (
     <currentUserContext.Provider value={currentUser}>

@@ -26,6 +26,8 @@ function Movies(props) {
   useEffect(() => {
     if(filter) {
       setShortMovies(sortShortMovies(props.searchResults))
+    } else {
+      return
     }
   }, [filter])
   return (
@@ -41,17 +43,27 @@ function Movies(props) {
         {props.loading && 
         <Preloader /> 
         }
+        {props.searchResults &&
+        <>
         <MoviesCardList
           films={filter ? shortMovies : props.searchResults}
           onCardSave={handleSave}
           onCardDelete={handleDelete}
           checkFilmStatus={props.checkFilmStatus}
         />
+        {props.searchResults && props.searchResults.length > 3 ?
           <button 
           className="movies__button-more" 
           type="button" 
         >Еще</button> 
-
+        :
+        null
+        }
+        </>
+        }
+        {props.searchResults === undefined && 
+          <p style={{textAlign: 'center'}}>Ничего не найдено</p>
+        }
       </section>
       </div>
     </main>
