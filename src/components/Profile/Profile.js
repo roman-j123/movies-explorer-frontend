@@ -68,7 +68,9 @@ function Profile(props) {
               className="profile__submit" 
               type="submit" 
               onClick={handleSubmit}
-              disabled={!validate.isValid || validate.values.name.legth === 0}  
+              disabled={!validate.isValid || 
+              (validate.values.name === currentUser.name 
+              && validate.values.email === currentUser.email)}  
               >Сохарнить</button>
           :
           <>
