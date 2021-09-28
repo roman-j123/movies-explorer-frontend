@@ -39,7 +39,8 @@ function Login(props) {
           onChange={validate.handleChange}
           required
         />
-        <p className="field__error">{validate.errors.password || props.errorMessage || ''}</p>
+        <p className="field__error">{validate.errors.password || ''}</p>
+        <p className="field__error">{props.errorMessage}</p>
         <div className="form__buttom">
           <button className="form__submit" type="submit" disabled={!validate.isValid}>Войти</button>
           <p className="form__submit-text">Ещё не зарегистрированы?&nbsp;

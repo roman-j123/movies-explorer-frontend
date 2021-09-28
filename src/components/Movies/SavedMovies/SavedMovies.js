@@ -44,21 +44,18 @@ function SavedMovies(props) {
           onCardDelete={handleDelete}
           checkFilmStatus={props.checkFilmStatus}
         />
-        {props.favoriteFilmsList && props.favoriteFilmsList.length > 3 ?
+        {props.favoriteFilmsList && props.favoriteFilmsList.length > 0 ?
           <button 
           className="movies__button-more" 
           type="button" 
         >Еще</button> 
         :
-        null
+        <p style={{textAlign: 'center'}}>Вы еще ничего не сохранили</p>
         }
         </>
         }
         {props.favoriteFilmsList === undefined && 
           <p style={{textAlign: 'center'}}>Ничего не найдено</p>
-        }
-        {!props.favoriteFilmsList.length && 
-          <p style={{textAlign: 'center'}}>Вы еще ничего не сохранили</p>
         }
       </section>
       </div>

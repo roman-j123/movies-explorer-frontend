@@ -53,7 +53,7 @@ function App() {
                       }
                     })
                     .catch(error => {console.log(error)})
-                    history.push('/movies');
+                    history.push('');
                 }
             })
             .catch((err) => {
@@ -101,6 +101,9 @@ function App() {
     .catch(error => {
       if(error === 'Error: 401') {
         setErrorMessage('Вы ввели неправильный логин или пароль.')
+        setTimeout(() => {
+          setErrorMessage('')
+      },10000)  
       }
       console.log(error);
     })
