@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Header from '../Header/Header';
 import { currentUserContext } from '../../contexts/currentUserContext.js';
 import { useFormWithValidation } from '../../hooks/formValidation.js';
@@ -7,6 +7,7 @@ function Profile(props) {
   const validate = useFormWithValidation();
   const currentUser = React.useContext(currentUserContext);
   const [editStatus, setEditStatus] = useState(false);
+
   
   function handleSubmit(event){
     event.preventDefault();
@@ -21,10 +22,24 @@ function Profile(props) {
   function handleLogout() {
     props.onLogout();
   }
+  const [isValuesNotMatched, setisValuesNotMatched] = useState(false);
 
+  function checkInputValues() {
+      if (currentUser.email === validate.values.email && 
+          currentUser.name === validate.values.name) {
+          setisValuesNotMatched(false);
+      } else {
+          setisValuesNotMatched(true);
+      }
+  }
   useEffect(() => {
     validate.setValues(currentUser);
-  }, [currentUser]);
+  },[])
+  useEffect(() => {
+     checkInputValues();
+     console.log(isValuesNotMatched + ' ' + validate.isValid)
+  }, [validate.handleChange]);
+
   return (
     <>
     <Header signIn={props.loggedIn} />
@@ -44,6 +59,7 @@ function Profile(props) {
                 minLength={2}
                 maxLength={20}
                 disabled={editStatus ? false : true}
+                required
               />
           </div>
           <p className="field__error">{validate.errors.name || ''}</p>
@@ -57,6 +73,7 @@ function Profile(props) {
               minLength={2}
               maxLength={20}
               disabled={editStatus ? false : true}
+              required
               />
           </div>
           <p className="field__error">{validate.errors.email || ''}</p>
@@ -68,9 +85,7 @@ function Profile(props) {
               className="profile__submit" 
               type="submit" 
               onClick={handleSubmit}
-              disabled={!validate.isValid || 
-              (validate.values.name === currentUser.name 
-              && validate.values.email === currentUser.email)}  
+              disabled={!isValuesNotMatched || !validate.isValid}  
               >Сохарнить</button>
           :
           <>
