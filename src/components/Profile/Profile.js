@@ -1,17 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Header from '../Header/Header';
 import { currentUserContext } from '../../contexts/currentUserContext.js';
-import { useFormWithValidation } from '../../hooks/formValidation.js';
+import useFormValidation from '../../hooks/formValidation.js';
 
 function Profile(props) {
-  const validate = useFormWithValidation();
   const currentUser = React.useContext(currentUserContext);
+  const { values, errors, isValid, handleChange } = useFormValidation(JSON.parse(localStorage.getItem('userData')));
   const [editStatus, setEditStatus] = useState(false);
-
-  
   function handleSubmit(event){
     event.preventDefault();
-    props.onEdit(validate.values);
+    props.onEdit(values);
     alert('Вы успешно обновили проифль')
     setEditStatus(false)
   }
@@ -24,23 +22,19 @@ function Profile(props) {
   }
   const [isValuesNotMatched, setisValuesNotMatched] = useState(false);
 
-  function checkInputValues() {
-      if (currentUser.email === validate.values.email && 
-          currentUser.name === validate.values.name) {
+  useEffect(() => {
+    function checkInputValues() {
+      if (currentUser.email === values.email && 
+          currentUser.name === values.name) {
           setisValuesNotMatched(false);
       } else {
           setisValuesNotMatched(true);
       }
   }
-  useEffect(() => {
-    validate.setValues(currentUser);
-  },[currentUser, validate])
-  useCallback(() => {
-     checkInputValues();
-     console.log(isValuesNotMatched + ' ' + validate.isValid)
-  }, [validate.handleChange]);
-
+    checkInputValues();
+  },[currentUser, handleChange, values.email, values.name])
   return (
+
     <>
     <Header signIn={props.loggedIn} />
     <main className="profile">
@@ -54,29 +48,29 @@ function Profile(props) {
                 type="text"
                 name="name"
                 pattern="^[A-Za-zА-ЯЁа-яё -]+$"
-                value={validate.values.name || ''}
-                onChange={validate.handleChange}
+                defaultValue={values.name}
+                onChange={handleChange}
                 minLength={2}
                 maxLength={20}
                 disabled={editStatus ? false : true}
                 required
               />
           </div>
-          <p className="field__error">{validate.errors.name || ''}</p>
+          <p className="field__error">{errors.name || ''}</p>
           <div className="profile__field field">
             <label className="field__title">Почта</label>
             <input className="field__value" 
               type="email" 
               name="email"
-              value={validate.values.email || ''}
-              onChange={validate.handleChange}
+              defaultValue={values.email}
+              onChange={handleChange}
               minLength={2}
               maxLength={20}
               disabled={editStatus ? false : true}
               required
               />
           </div>
-          <p className="field__error">{validate.errors.email || ''}</p>
+          <p className="field__error">{errors.email || ''}</p>
         </form>
         <div className="profile__buttons-container">
           <span style={{textAlign: 'center', fontSize: '12px', color: 'red', marginBottom: '15px'}}>{props.errorMessage}</span>
@@ -85,7 +79,7 @@ function Profile(props) {
               className="profile__submit" 
               type="submit" 
               onClick={handleSubmit}
-              disabled={!isValuesNotMatched || !validate.isValid}  
+              disabled={!isValuesNotMatched || !isValid}  
               >Сохарнить</button>
           :
           <>

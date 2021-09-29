@@ -1,13 +1,13 @@
 import React from 'react';
-import { useFormWithValidation } from '../../hooks/formValidation.js';
+import useFormValidation from '../../hooks/formValidation.js';
 import Logo from '../../images/logo.svg';
 
 function Register(props) {
-  const validate = useFormWithValidation();
+  const { values, errors, isValid, handleChange, resetForm } = useFormValidation();
 
   function handleSubmitForm(event) {
     event.preventDefault();
-    props.onRegister(validate.values)
+    props.onRegister(values)
   }
   return (
     <main className="register">
@@ -19,41 +19,41 @@ function Register(props) {
         <form className="register__form form" onSubmit={handleSubmitForm}>
           <label className="form__label" htmlFor="register-name">Имя</label>
           <input 
-            className={`form__input ${validate.errors.name ? 'form__input_error' : '' }`}
+            className={`form__input ${errors.name ? 'form__input_error' : '' }`}
             type="text" 
             name="name"
             minLength={2}
             id="register-name" 
-            value={validate.values.name|| ''}
-            onChange={validate.handleChange}  
+            value={values.name|| ''}
+            onChange={handleChange}  
             required
           />
-          <p className="field__error">{validate.errors.name || ''}</p>
+          <p className="field__error">{errors.name || ''}</p>
           <label className="form__label" htmlFor="register-email">E-Mail</label>
           <input 
-            className={`form__input ${validate.errors.email ? 'form__input_error' : '' }`}
+            className={`form__input ${errors.email ? 'form__input_error' : '' }`}
             type="email" 
             name="email"
             id="register-email"
-            value={validate.values.email || ''}
-            onChange={validate.handleChange} 
+            value={values.email || ''}
+            onChange={handleChange} 
             required
           />
-          <p className="field__error">{validate.errors.email || ''}</p>
+          <p className="field__error">{errors.email || ''}</p>
           <label className="form__label" htmlFor="register-password">Пароль</label>
           <input 
-            className={`form__input ${validate.errors.password ? 'form__input_error' : '' }`} 
+            className={`form__input ${errors.password ? 'form__input_error' : '' }`} 
             type="password" 
             name="password"
             minLength={8}
             id="register-password"
-            value={validate.values.password || ''}
-            onChange={validate.handleChange} 
+            value={values.password || ''}
+            onChange={handleChange} 
             required
           />
-          <p className="field__error">{validate.errors.password || ''}</p>
+          <p className="field__error">{errors.password || ''}</p>
           <div className="form__buttom">
-            <button className="form__submit" type="submit" disabled={!validate.isValid}>Зарегистрироваться</button>
+            <button className="form__submit" type="submit" disabled={!isValid}>Зарегистрироваться</button>
             <p className="form__submit-text">Уже зарегистрированы?&nbsp;
             <a href="/signin" className="form__submit-text-href">Войти</a>
             </p>

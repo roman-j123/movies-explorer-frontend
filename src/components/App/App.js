@@ -3,6 +3,7 @@ import moviesApi from '../../utils/MoviesApi.js';
 import mainApi from '../../utils/MainApi.js';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { currentUserContext } from '../../contexts/currentUserContext.js';
+import useFormValidation from '../../hooks/formValidation.js';
 import Header from '../Header/Header.js';
 import Main from '../Main/Main.js';
 import Movies from '../Movies/Movies.js';
@@ -28,90 +29,69 @@ function App() {
 
   const history = useHistory();
 
-  const tokenChek = useCallback(() => {
-    const token = localStorage.getItem('token');
-    console.log(token)
-    if(token) {
-      setLoggedIn(true);
-      getUserData(token)
-    }
-  },[loggedIn])
-  
-
-  
   useEffect(() => {
-    tokenChek();
-  },[])
-  function getUserData(token) {
-    mainApi.getContent(token)
-    .then((response) => {
-      setLoggedIn(true);
-      setCurrentUser(response);
-      getAllMovies();
-      getFavoriteMovies(response)
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-  }
-  function getFavoriteMovies(user) {
-    mainApi.getFavoriteMovies() 
-    .then((response) => {
-      if(response) {
-        const filteredMovies = response.movies.filter(item => item.owner === user._id);
-        console.log(filteredMovies);
-        setFavoriteFilms(filteredMovies)
+  function tokenCheck() {
+    const token = localStorage.getItem('token')
+      if(token) {
+        getUser(token);
+        getAllMovies();
       }
-    })
-    .catch(error => {console.log(error)})
-  }
-  /*useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setLoggedIn(true);
-      if(loggedIn) {
-        const films = JSON.parse(localStorage.getItem('moviesList'));
-        if(films) {
-          setFilms(films)
-        } else {
-          getAllMovies();
-        }
-        mainApi.getContent(token)
-            .then((res) => {
-                if (res) {
-                  setCurrentUser(res);
-                    mainApi.getFavoriteMovies() 
-                    .then((response) => {
-                      if(response) {
-                        const filteredMovies = response.movies.filter(item => item.owner === res._id);
-                        console.log(filteredMovies);
-                        setFavoriteFilms(filteredMovies)
-                      }
-                    })
-                    .catch(error => {console.log(error)})
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-                localStorage.removeItem("token");
-                history.push("/");
-            });
-        }
     }
-  },[loggedIn])
-  */
-  // Получаем весь список фильмов
- function getAllMovies() {
-   setIsloading(true);
-    moviesApi.getAllFilms()
+    function getUser(token) {
+      mainApi.getContent(token)
       .then(response => {
-        localStorage.setItem('moviesList', JSON.stringify(response))
+        localStorage.setItem('userData', JSON.stringify({name: response.name, email: response.email}))
+        setCurrentUser(response)
+        if(response) {
+          setLoggedIn(true)
+          getFavoriteMovies(response)
+        }
       })
-      .catch(err => {console.log(err)})
+      .catch(error => {
+        console.log(error)
+      })
+    }
+    function getFavoriteMovies(user) {
+      mainApi.getFavoriteMovies() 
+      .then((response) => {
+        if(response) {
+          const filteredMovies = response.movies.filter(item => item.owner === user._id);
+          setFavoriteFilms(filteredMovies)
+        }
+      })
+      .catch(error => {console.log(error)})
+    }
+    function getAllMovies() {
+      setIsloading(true)
+      moviesApi.getAllFilms()
+      .then((response) => {
+        localStorage.setItem('moviesList', JSON.stringify(response))
+        setFilms(response);
+      })
+      .catch((error) => {
+        console.log(error)
+      })
       .finally(() => {
         setIsloading(false);
       })
-  }
+    }
+    tokenCheck()
+  },[history])
+  
+
+  useEffect(() => {
+    if(searchFilms) {
+      localStorage.setItem('searchResult', JSON.stringify(searchFilms));
+    } else {
+      localStorage.setItem('searchResult', undefined);
+    } 
+    if(favoriteFilms) {
+      setFavoriteSearchFilms(favoriteFilms)
+    }
+  },[loggedIn, favoriteFilms, searchFilms])
+
+  // Получаем весь список фильмов
+
   function handleRegiser(data) {
     mainApi.registerUser(data)
     .then(response => {
@@ -154,16 +134,6 @@ function App() {
     setLoggedIn(false);
   }
 
-  function handleGetUserInfo() {
-    const token = localStorage.getItem('token')
-    mainApi.getContent(token)
-      .then(response => {
-        setCurrentUser(response)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  }
   function handleUpdateUserProfile(profile) {
     mainApi.updateUserProfile(profile)
     .then(response => {
@@ -241,17 +211,7 @@ function App() {
   }
 
   
-  
-  useEffect(() => {
-    if(searchFilms) {
-      localStorage.setItem('searchResult', JSON.stringify(searchFilms));
-    } else {
-      localStorage.setItem('searchResult', undefined);
-    } 
-    if(favoriteFilms) {
-      setFavoriteSearchFilms(favoriteFilms)
-    }
-  },[loggedIn, favoriteFilms, searchFilms])
+
 
   return (
     <currentUserContext.Provider value={currentUser}>
@@ -261,17 +221,6 @@ function App() {
             <Header signIn={loggedIn} />
             <Main />
             <Footer />
-          </Route>
-          <Route path="/signup">
-            <Register
-              onRegister={handleRegiser}            
-             />
-          </Route>
-          <Route path="/signin">
-            <Login 
-              onLogin={handleLogin}
-              errorMessage={errorMessage}
-            />
           </Route>
           <ProtectedRoute 
             path="/movies" 
@@ -297,11 +246,21 @@ function App() {
             path="/profile" 
             loggedIn={loggedIn}
             component={Profile}
-            userInfo={handleGetUserInfo}
             onEdit={handleUpdateUserProfile}
             onLogout={handleLogout}
             errorMessage={errorMessage}
             />
+          <Route path="/signup">
+            <Register
+              onRegister={handleRegiser}            
+             />
+          </Route>
+          <Route path="/signin">
+            <Login 
+              onLogin={handleLogin}
+              errorMessage={errorMessage}
+            />
+          </Route>
           <Route path="*">
             <PageNotFound />
           </Route>
