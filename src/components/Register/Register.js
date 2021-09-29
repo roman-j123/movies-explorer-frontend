@@ -1,9 +1,10 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom'
 import useFormValidation from '../../hooks/formValidation.js';
 import Logo from '../../images/logo.svg';
 
 function Register(props) {
-  const { values, errors, isValid, handleChange, resetForm } = useFormValidation();
+  const { values, errors, isValid, handleChange } = useFormValidation({});
 
   function handleSubmitForm(event) {
     event.preventDefault();
@@ -24,7 +25,7 @@ function Register(props) {
             name="name"
             minLength={2}
             id="register-name" 
-            value={values.name|| ''}
+            value={values.name || ''}
             onChange={handleChange}  
             required
           />
@@ -55,7 +56,7 @@ function Register(props) {
           <div className="form__buttom">
             <button className="form__submit" type="submit" disabled={!isValid}>Зарегистрироваться</button>
             <p className="form__submit-text">Уже зарегистрированы?&nbsp;
-            <a href="/signin" className="form__submit-text-href">Войти</a>
+            <NavLink to="/signin" className="form__submit-text-href">Войти</NavLink>
             </p>
           </div>
         </form>

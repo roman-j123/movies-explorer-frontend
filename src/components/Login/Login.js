@@ -45,7 +45,7 @@ function Login(props) {
         <div className="form__buttom">
           <button className="form__submit" type="submit" disabled={!isValid}>Войти</button>
           <p className="form__submit-text">Ещё не зарегистрированы?&nbsp;
-            <a href="/signup" className="form__submit-text-href">Регистрация</a>
+            <NavLink to="/signup" className="form__submit-text-href">Регистрация</NavLink>
           </p>
         </div>
       </form>

@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import moviesApi from '../../utils/MoviesApi.js';
 import mainApi from '../../utils/MainApi.js';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import { currentUserContext } from '../../contexts/currentUserContext.js';
 import useFormValidation from '../../hooks/formValidation.js';
 import Header from '../Header/Header.js';
@@ -28,14 +28,21 @@ function App() {
   const [loading, setIsloading] = useState(false)
 
   const history = useHistory();
+  let location = useLocation();
 
   useEffect(() => {
-  function tokenCheck() {
+    function tokenCheck() {
+    history.push(location.pathname)
     const token = localStorage.getItem('token')
+    const searchResult = JSON.parse(localStorage.getItem('searchResult'))
+    if(searchResult) {
+      setSearchFilms(searchResult)
+    }
       if(token) {
-        getUser(token);
-        getAllMovies();
-      }
+        setLoggedIn(true)
+          getUser(token);
+          getAllMovies();
+        }
     }
     function getUser(token) {
       mainApi.getContent(token)
@@ -43,9 +50,9 @@ function App() {
         localStorage.setItem('userData', JSON.stringify({name: response.name, email: response.email}))
         setCurrentUser(response)
         if(response) {
-          setLoggedIn(true)
           getFavoriteMovies(response)
         }
+        history.push(location.pathname)
       })
       .catch(error => {
         console.log(error)
@@ -88,7 +95,7 @@ function App() {
     if(favoriteFilms) {
       setFavoriteSearchFilms(favoriteFilms)
     }
-  },[loggedIn, favoriteFilms, searchFilms])
+  },[favoriteFilms, searchFilms])
 
   // Получаем весь список фильмов
 
@@ -249,7 +256,7 @@ function App() {
             onEdit={handleUpdateUserProfile}
             onLogout={handleLogout}
             errorMessage={errorMessage}
-            />
+            /> 
           <Route path="/signup">
             <Register
               onRegister={handleRegiser}            
