@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import moviesApi from '../../utils/MoviesApi.js';
 import mainApi from '../../utils/MainApi.js';
 import { Route, Switch, useHistory } from 'react-router-dom';
@@ -12,7 +12,7 @@ import Register from '../Register/Register.js';
 import Login from '../Login/Login.js';
 import Footer from '../Footer/Footer.js';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute.js';
-import PageNotFound from '../PageNotFound/PageNotFound.js'
+import PageNotFound from '../PageNotFound/PageNotFound.js';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
@@ -26,10 +26,46 @@ function App() {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setIsloading] = useState(false)
 
-
   const history = useHistory();
 
+  const tokenChek = useCallback(() => {
+    const token = localStorage.getItem('token');
+    console.log(token)
+    if(token) {
+      setLoggedIn(true);
+      getUserData(token)
+    }
+  },[loggedIn])
+  
+
+  
   useEffect(() => {
+    tokenChek();
+  },[])
+  function getUserData(token) {
+    mainApi.getContent(token)
+    .then((response) => {
+      setLoggedIn(true);
+      setCurrentUser(response);
+      getAllMovies();
+      getFavoriteMovies(response)
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+  }
+  function getFavoriteMovies(user) {
+    mainApi.getFavoriteMovies() 
+    .then((response) => {
+      if(response) {
+        const filteredMovies = response.movies.filter(item => item.owner === user._id);
+        console.log(filteredMovies);
+        setFavoriteFilms(filteredMovies)
+      }
+    })
+    .catch(error => {console.log(error)})
+  }
+  /*useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       setLoggedIn(true);
@@ -43,7 +79,7 @@ function App() {
         mainApi.getContent(token)
             .then((res) => {
                 if (res) {
-                    setCurrentUser(res);
+                  setCurrentUser(res);
                     mainApi.getFavoriteMovies() 
                     .then((response) => {
                       if(response) {
@@ -53,7 +89,6 @@ function App() {
                       }
                     })
                     .catch(error => {console.log(error)})
-                    history.push('');
                 }
             })
             .catch((err) => {
@@ -61,11 +96,10 @@ function App() {
                 localStorage.removeItem("token");
                 history.push("/");
             });
-          }
-          
+        }
     }
   },[loggedIn])
-
+  */
   // Получаем весь список фильмов
  function getAllMovies() {
    setIsloading(true);
@@ -95,7 +129,7 @@ function App() {
       if(response.token) {
         setLoggedIn(true);
         localStorage.setItem('token', response.token);
-        history.push('/movies');
+        history.push('/movies')
       }
     })
     .catch(error => {
@@ -205,7 +239,6 @@ function App() {
       setFavoriteSearchFilms(handleSubmit(favoriteFilms, keyword))
     } 
   }
-  // Сортировка коротких фильмов
 
   
   

@@ -34,8 +34,8 @@ function Profile(props) {
   }
   useEffect(() => {
     validate.setValues(currentUser);
-  },[])
-  useEffect(() => {
+  },[currentUser, validate])
+  useCallback(() => {
      checkInputValues();
      console.log(isValuesNotMatched + ' ' + validate.isValid)
   }, [validate.handleChange]);
