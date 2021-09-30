@@ -49,7 +49,6 @@ function MoviesCardList(props) {
       console.log('mobile_size')
       setRenderMovies(5);
     }
-    console.log(screenSize + renderMovies)
   },[showMovies])
 
   return (
@@ -67,7 +66,7 @@ function MoviesCardList(props) {
           })
         }
       </ul>
-      {props.films && props.films.length > 3 ?
+      {showMovies.length >= renderMovies ?
           <button 
           className="movies__button-more" 
           type="button"
