@@ -130,9 +130,11 @@ function App() {
     })
   }
   function handleLogout() {
+    history.push('/')
     localStorage.removeItem('searchResult');
     localStorage.removeItem('moviesList');
     localStorage.removeItem('token');
+    localStorage.removeItem('userData')
     setCurrentUser({name: '', email: ''})
     setFilms([]);
     setSearchFilms([]);
