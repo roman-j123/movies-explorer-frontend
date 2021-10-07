@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../Header/Header';
 import { currentUserContext } from '../../contexts/currentUserContext.js';
 import useFormValidation from '../../hooks/formValidation.js';

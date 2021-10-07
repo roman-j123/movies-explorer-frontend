@@ -4,7 +4,7 @@ import MoviesCard from '../MoviesCard/MoviesCard.js';
 function MoviesCardList(props) {
   const [screenSize, setScreenSize] = useState(window.innerWidth);
   const [renderMovies, setRenderMovies] = useState(0);
-  const [showMovies, setShowMovies] = useState([])
+  const [showMovies, setShowMovies] = useState([]);
   function onCardSave(item) {
     props.onCardSave(item)
   }
@@ -66,7 +66,7 @@ function MoviesCardList(props) {
           })
         }
       </ul>
-      {showMovies.length >= renderMovies ?
+      {showMovies.length > renderMovies ?
           <button 
           className="movies__button-more" 
           type="button"

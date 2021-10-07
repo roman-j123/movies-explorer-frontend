@@ -3,7 +3,6 @@ import moviesApi from '../../utils/MoviesApi.js';
 import mainApi from '../../utils/MainApi.js';
 import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import { currentUserContext } from '../../contexts/currentUserContext.js';
-import useFormValidation from '../../hooks/formValidation.js';
 import Header from '../Header/Header.js';
 import Main from '../Main/Main.js';
 import Movies from '../Movies/Movies.js';
@@ -29,76 +28,76 @@ function App() {
 
   const history = useHistory();
   let location = useLocation();
-
+  useEffect(() => {
+    const result = JSON.parse(localStorage.getItem('searchResult'));
+    if(result) {
+      setSearchFilms(result)
+    }
+  },[])
   useEffect(() => {
     function tokenCheck() {
-    history.push(location.pathname)
     const token = localStorage.getItem('token')
-    const searchResult = JSON.parse(localStorage.getItem('searchResult'))
-    if(searchResult) {
-      setSearchFilms(searchResult)
-    }
       if(token) {
         setLoggedIn(true)
-          getUser(token);
-          getAllMovies();
-        }
+        getUser(token);
+        getFavoriteMovies(token)
+        getAllMovies()
+        history.push(location)
+      }
     }
-    function getUser(token) {
-      mainApi.getContent(token)
-      .then(response => {
-        localStorage.setItem('userData', JSON.stringify({name: response.name, email: response.email}))
-        setCurrentUser(response)
-        if(response) {
-          getFavoriteMovies(response)
-        }
-        history.push(location.pathname)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    }
-    function getFavoriteMovies(user) {
-      mainApi.getFavoriteMovies() 
-      .then((response) => {
-        if(response) {
-          const filteredMovies = response.movies.filter(item => item.owner === user._id);
-          setFavoriteFilms(filteredMovies)
-        }
-      })
-      .catch(error => {console.log(error)})
-    }
-    function getAllMovies() {
-      setIsloading(true)
-      moviesApi.getAllFilms()
-      .then((response) => {
-        localStorage.setItem('moviesList', JSON.stringify(response))
-        setFilms(response);
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-      .finally(() => {
-        setIsloading(false);
-      })
-    }
-    tokenCheck()
-  },[history])
-  
 
+    tokenCheck()
+  },[loggedIn])
+  useEffect(() => {
+    if(favoriteFilms) {
+      setFavoriteSearchFilms(favoriteFilms)
+    }
+  },[favoriteFilms])
   useEffect(() => {
     if(searchFilms) {
       localStorage.setItem('searchResult', JSON.stringify(searchFilms));
     } else {
       localStorage.setItem('searchResult', undefined);
     } 
-    if(favoriteFilms) {
-      setFavoriteSearchFilms(favoriteFilms)
-    }
-  },[favoriteFilms, searchFilms])
-
+  }, [searchFilms])
   // Получаем весь список фильмов
-
+  function getAllMovies() {
+    setIsloading(true)
+    moviesApi.getAllFilms()
+    .then((response) => {
+      localStorage.setItem('moviesList', JSON.stringify(response))
+      setFilms(response);
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+    .finally(() => {
+      setIsloading(false);
+    })
+  }
+  function getUser(token) {
+    mainApi.getContent(token)
+    .then(response => {
+      localStorage.setItem('userData', JSON.stringify({name: response.name, email: response.email}))
+      setCurrentUser(response)
+      if(response) {
+        getFavoriteMovies(response)
+      }
+    })
+    .catch(error => {
+      console.log(error)
+    })
+  }
+  function getFavoriteMovies(user) {
+    mainApi.getFavoriteMovies() 
+    .then((response) => {
+      if(response) {
+        const filteredMovies = response.movies.filter(item => item.owner === user._id);
+        setFavoriteFilms(filteredMovies)
+      }
+    })
+    .catch(error => {console.log(error)})
+  }
   function handleRegiser(data) {
     mainApi.registerUser(data)
     .then(response => {
@@ -114,8 +113,10 @@ function App() {
     mainApi.loginUser(item)
     .then(response => {
       if(response.token) {
-        setLoggedIn(true);
         localStorage.setItem('token', response.token);
+        setLoggedIn(true);
+        getAllMovies();
+        getUser(response.token)
         history.push('/movies')
       }
     })
@@ -146,6 +147,7 @@ function App() {
   function handleUpdateUserProfile(profile) {
     mainApi.updateUserProfile(profile)
     .then(response => {
+      localStorage.setItem('userData', JSON.stringify({name: response.name, email: response.email}))
       setCurrentUser(response)
     })
     .catch((error) => {
@@ -208,9 +210,14 @@ function App() {
     return searchResult;
   }
   function searchAllMovies(keyword) {
-    const films = JSON.parse(localStorage.getItem('moviesList'));
-    setSearchFilms(handleSubmit(films, keyword))
-    return localStorage.setItem('searchResult', JSON.stringify(searchFilms))
+    if(!keyword) {
+      return 
+    } else {
+      const result = handleSubmit(films, keyword);
+      setSearchFilms(result)
+      localStorage.setItem('searchResult', JSON.stringify(result));
+    }
+    return searchFilms
   }
   function searchFavoriteMovies(keyword) {
     setFavoriteSearchFilms(favoriteFilms)
