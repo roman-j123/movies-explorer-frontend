@@ -10,3 +10,8 @@
 .notFound__back:hover {
   color: rgba(43,224,128, .7);
 }
+@media (min-width: 320px) and (max-width: 560px) {
+  .notFound__back {
+    font-size: 12px;
+  }
+}
