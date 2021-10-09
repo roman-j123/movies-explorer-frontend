@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import MoviesCardList from './MoviesCardList/MoviesCardList.js';
-import SearchForm from './SearchForm/SearchForm.js';
-import Footer from '../Footer/Footer.js';
-import Preloader from './Preloader/Preloader.js';
-import Header from '../Header/Header.js';
+import React, { useState, useEffect } from 'react';
+import MoviesCardList from './../MoviesCardList/MoviesCardList.js';
+import SearchForm from './../SearchForm/SearchForm.js';
+import Footer from '../../Footer/Footer.js';
+import Header from '../../Header/Header.js';
+import Preloader from '../Preloader/Preloader.js';
 
-function Movies(props) {
+function SavedMovies(props) {
   const [filter, setFilter] = useState(false);
   const [shortMovies, setShortMovies] = useState([])
   
@@ -16,21 +16,14 @@ function Movies(props) {
     const shortMoviesArray = movies.filter((movie) => movie.duration <= 40);
   return shortMoviesArray;
   }
-  function handleSave(item) {
-    props.handleSaveCard(item);
-  }
   function handleDelete(item) {
-    props.handleDeleteMovie(item)
+    props.handleDeleteMovie(item);
   }
-
   useEffect(() => {
     if(filter) {
-      setShortMovies(sortShortMovies(props.searchResults || []))
-    } else {
-      return
+      setShortMovies(sortShortMovies(props.favoriteFilmsList))
     }
-  }, [filter, props.searchResults])
-
+  }, [filter])
   return (
     <>
     <Header signIn={props.loggedIn}/>
@@ -44,17 +37,19 @@ function Movies(props) {
         {props.loading && 
         <Preloader /> 
         }
-        {props.searchResults &&
+        {props.favoriteFilmsList &&
         <>
         <MoviesCardList
-          films={filter ? shortMovies : props.searchResults}
-          onCardSave={handleSave}
+          films={filter ? shortMovies : props.favoriteFilmsList}
           onCardDelete={handleDelete}
           checkFilmStatus={props.checkFilmStatus}
         />
+        {props.favoriteFilmsList && props.favoriteFilmsList.length === 0 &&
+        <p style={{textAlign: 'center'}}>Вы еще ничего не сохранили</p>
+        }
         </>
         }
-        {props.searchResults === undefined && 
+        {props.favoriteFilmsList === undefined && 
           <p style={{textAlign: 'center'}}>Ничего не найдено</p>
         }
       </section>
@@ -65,4 +60,4 @@ function Movies(props) {
   )
 }
 
-export default Movies;
+export default SavedMovies;

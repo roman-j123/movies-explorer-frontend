@@ -1,61 +1,288 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import moviesApi from '../../utils/MoviesApi.js';
+import mainApi from '../../utils/MainApi.js';
+import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
+import { currentUserContext } from '../../contexts/currentUserContext.js';
 import Header from '../Header/Header.js';
 import Main from '../Main/Main.js';
 import Movies from '../Movies/Movies.js';
+import SavedMovies from '../Movies/SavedMovies/SavedMovies.js';
 import Profile from '../Profile/Profile.js';
 import Register from '../Register/Register.js';
 import Login from '../Login/Login.js';
 import Footer from '../Footer/Footer.js';
-import PageNotFound from '../PageNotFound/PageNotFound.js'
-import FilmsArr from '../../vendor/films.js';
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute.js';
+import PageNotFound from '../PageNotFound/PageNotFound.js';
 
 function App() {
-  const [signIn, setIsSignIn] = useState(true);
-  const [films, setFilms] = useState([]);
+  const [currentUser, setCurrentUser] = useState({});
+  const [loggedIn, setLoggedIn] = useState(false);
+  
+  const [films, setFilms] = useState([]); // Список всех фильмов
+  const [searchFilms, setSearchFilms] = useState([]); // Список выдачи результатов
+  const [favoriteFilms, setFavoriteFilms] = useState([]); // Список сохраненных фильмов
+  const [favoriteSearchFilms, setFavoriteSearchFilms] = useState(favoriteFilms);
+  
+  const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setIsloading] = useState(false)
+
+  const history = useHistory();
+  let location = useLocation();
   useEffect(() => {
-    document.title = 'Учебный проект студента факультета Веб-разработки.';
-  })
- 
-  useEffect(() => {
-    setFilms(FilmsArr);
-    if(document.location.pathname === '/') {
-      setIsSignIn(false);
+    const result = JSON.parse(localStorage.getItem('searchResult'));
+    if(result) {
+      setSearchFilms(result)
     }
   },[])
+  useEffect(() => {
+    function tokenCheck() {
+    const token = localStorage.getItem('token')
+      if(token) {
+        setLoggedIn(true)
+        getUser(token);
+        getFavoriteMovies(token)
+        getAllMovies()
+        history.push(location)
+      }
+    }
+
+    tokenCheck()
+  },[loggedIn])
+  useEffect(() => {
+    if(favoriteFilms) {
+      setFavoriteSearchFilms(favoriteFilms)
+    }
+  },[favoriteFilms])
+  useEffect(() => {
+    if(searchFilms) {
+      localStorage.setItem('searchResult', JSON.stringify(searchFilms));
+    } else {
+      localStorage.setItem('searchResult', undefined);
+    } 
+  }, [searchFilms])
+  // Получаем весь список фильмов
+  function getAllMovies() {
+    setIsloading(true)
+    moviesApi.getAllFilms()
+    .then((response) => {
+      localStorage.setItem('moviesList', JSON.stringify(response))
+      setFilms(response);
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+    .finally(() => {
+      setIsloading(false);
+    })
+  }
+  function getUser(token) {
+    mainApi.getContent(token)
+    .then(response => {
+      localStorage.setItem('userData', JSON.stringify({name: response.name, email: response.email}))
+      setCurrentUser(response)
+      if(response) {
+        getFavoriteMovies(response)
+      }
+    })
+    .catch(error => {
+      console.log(error)
+    })
+  }
+  function getFavoriteMovies(user) {
+    mainApi.getFavoriteMovies() 
+    .then((response) => {
+      if(response) {
+        const filteredMovies = response.movies.filter(item => item.owner === user._id);
+        setFavoriteFilms(filteredMovies)
+      }
+    })
+    .catch(error => {console.log(error)})
+  }
+  function handleRegiser(data) {
+    mainApi.registerUser(data)
+    .then(response => {
+        if(response) {
+          handleLogin({email: data.email, password: data.password})
+        }
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
+  function handleLogin(item) {
+    mainApi.loginUser(item)
+    .then(response => {
+      if(response.token) {
+        localStorage.setItem('token', response.token);
+        setLoggedIn(true);
+        getAllMovies();
+        getUser(response.token)
+        history.push('/movies')
+      }
+    })
+    .catch(error => {
+      if(error === 'Error: 401') {
+        setErrorMessage('Вы ввели неправильный логин или пароль.')
+        setTimeout(() => {
+          setErrorMessage('')
+      },10000)  
+      }
+      console.log(error);
+    })
+  }
+  function handleLogout() {
+    history.push('/')
+    localStorage.removeItem('searchResult');
+    localStorage.removeItem('moviesList');
+    localStorage.removeItem('token');
+    localStorage.removeItem('userData')
+    setCurrentUser({name: '', email: ''})
+    setFilms([]);
+    setSearchFilms([]);
+    setFavoriteFilms([]);
+    setFavoriteSearchFilms([]);
+    setLoggedIn(false);
+  }
+
+  function handleUpdateUserProfile(profile) {
+    mainApi.updateUserProfile(profile)
+    .then(response => {
+      localStorage.setItem('userData', JSON.stringify({name: response.name, email: response.email}))
+      setCurrentUser(response)
+    })
+    .catch((error) => {
+      if(error === 'Error: 400') {
+        setErrorMessage('При обновлении профиля произошла ошибка')
+        setTimeout(() => {
+            setErrorMessage('')
+        },10000)  
+      }
+      console.log(error)
+    })
+  }
+
+  // Сохраняем фильм
+  function handleFavoriteMovie(data) {
+    mainApi.doFavoriteMovie(data)
+    .then(response => {
+      const newSavedFilm = response;
+      setFavoriteFilms([...favoriteFilms, newSavedFilm]);
+    })
+    .catch(error => {
+      console.log(error);
+    })
+  }
+  function checkFilmStatus(film) {
+    return favoriteFilms.some((item) => item.movieId === film.id && item.owner === currentUser._id);
+  }
+  function handleDeleteFilm(data) {
+    const movieId = favoriteFilms.find((item) => item.nameRU === data.nameRU);
+    mainApi.deleteFavoriteMovie(movieId._id)
+      .then(() => {
+        mainApi.getFavoriteMovies() 
+        .then((response) => {
+          if(response) {
+            console.log(response.movies);
+            setFavoriteFilms(response.movies)
+          }
+        })
+        .catch(error => {console.log(error)})
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function handleInput(value) {
+    searchAllMovies(value)
+  }
+  function handleFavoriteInput(value) {
+    searchFavoriteMovies(value)
+  }
+  // Поиск фильмов
+  function handleSubmit(data, value) {
+    const searchResult = data.filter((item) => {
+      return ( 
+        item.nameRU.toLowerCase().includes(value.toLowerCase())
+              )
+    })
+    if(searchResult.length < 1) {
+      return
+    }
+    return searchResult;
+  }
+  function searchAllMovies(keyword) {
+    if(!keyword) {
+      return 
+    } else {
+      const result = handleSubmit(films, keyword);
+      setSearchFilms(result)
+      localStorage.setItem('searchResult', JSON.stringify(result));
+    }
+    return searchFilms
+  }
+  function searchFavoriteMovies(keyword) {
+    setFavoriteSearchFilms(favoriteFilms)
+    if(keyword !== '') {
+      setFavoriteSearchFilms(handleSubmit(favoriteFilms, keyword))
+    } 
+  }
+
+  
+
+
   return (
+    <currentUserContext.Provider value={currentUser}>
     <div className="app">
         <Switch>
           <Route exact path="/">
-            <Header signIn={signIn} />
+            <Header signIn={loggedIn} />
             <Main />
             <Footer />
-          </ Route>
+          </Route>
+          <ProtectedRoute 
+            path="/movies" 
+            loggedIn={loggedIn}
+            component={Movies}
+            searchResults={searchFilms}
+            handleSaveCard={handleFavoriteMovie}
+            handleDeleteMovie={handleDeleteFilm}
+            checkFilmStatus={checkFilmStatus}
+            loading={loading}
+            handleInput={handleInput}
+            />
+          <ProtectedRoute 
+            path="/saved-movies" 
+            loggedIn={loggedIn}
+            component={SavedMovies}
+            favoriteFilmsList={favoriteSearchFilms}
+            handleDeleteMovie={handleDeleteFilm}
+            checkFilmStatus={checkFilmStatus}
+            handleInput={handleFavoriteInput}
+          />
+          <ProtectedRoute 
+            path="/profile" 
+            loggedIn={loggedIn}
+            component={Profile}
+            onEdit={handleUpdateUserProfile}
+            onLogout={handleLogout}
+            errorMessage={errorMessage}
+            /> 
           <Route path="/signup">
-            <Register />
+            <Register
+              onRegister={handleRegiser}            
+             />
           </Route>
           <Route path="/signin">
-            <Login />
-          </Route>
-          <Route path="/movies">
-          <Header signIn={signIn} />
-            <Movies moviesList={films} />
-            <Footer />
-          </Route>
-          <Route path="/saved-movies">
-            <Header signIn={signIn} />
-            <Movies moviesList={films.filter(el => el.liked === true)} />
-            <Footer />
-          </Route>
-          <Route path="/profile">
-            <Header signIn={signIn} />
-            <Profile />
+            <Login 
+              onLogin={handleLogin}
+              errorMessage={errorMessage}
+            />
           </Route>
           <Route path="*">
             <PageNotFound />
           </Route>
         </ Switch>
     </div>
+    </currentUserContext.Provider>
   );
 }
 

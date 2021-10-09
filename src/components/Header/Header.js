@@ -24,9 +24,9 @@ function Header(props) {
     <header className="header container">
       <div className="container__inner">
         <div className="header__container">
-          <a href='/'>
+          <NavLink exact to="/">
             <img src={logo} alt="Логотип сайта" />
-          </a>
+          </NavLink>
           {
             props.signIn === true && 
             ( <ul className="header__navigation" id="navigation">
